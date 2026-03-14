@@ -1,12 +1,30 @@
 import express from "express";
 import dotenv from "dotenv";
+import { connnectDB } from "./libs/db.js";
+import authRoute from "./routes/authRoute.js";
+import userRoute from "./routes/userRoute.js";
+import cookieParser from "cookie-parser";
+import { protectedRoute } from "./middlewares/authMiddleware.js";
+
+dotenv.config();
 
 const app = express(); // khởi tạo ứng dụng
 const PORT = process.env.PORT || 5001;
 
 // middlewares
 app.use(express.json()); // middleware này sẽ giúp express hiểu và đọc được req.body dưới dạng JSON
+app.use(cookieParser());
 
-app.listen((req, res) => {
-  console.log(`Server bắt đầu chạy trên cổng ${PORT}`);
+// public routes - thuộc phần Authentication
+app.use("/api/auth", authRoute);
+
+// private routes - thuộc phần Authorization
+app.use(protectedRoute);
+app.use("/api/users", userRoute);
+
+// .then() là method của Promise --> đảm bảo rằng chỉ khi kết nối DB thành công thì server mới bắt đầu chạy
+connnectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server bắt đầu chạy trên cổng ${PORT}`);
+  });
 });

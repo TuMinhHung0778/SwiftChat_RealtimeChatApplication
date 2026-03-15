@@ -4,6 +4,8 @@ import { connnectDB } from "./libs/db.js";
 import authRoute from "./routes/authRoute.js";
 import userRoute from "./routes/userRoute.js";
 import friendRoute from "./routes/friendRoute.js";
+import messageRoute from "./routes/messageRoute.js";
+import conversationRoute from "./routes/conversationRoute.js";
 import cookieParser from "cookie-parser";
 import { protectedRoute } from "./middlewares/authMiddleware.js";
 import cors from "cors";
@@ -25,6 +27,8 @@ app.use("/api/auth", authRoute);
 app.use(protectedRoute);
 app.use("/api/users", userRoute);
 app.use("/api/friends", friendRoute);
+app.use("/api/messages", messageRoute);
+app.use("/api/conversations", conversationRoute);
 
 // .then() là method của Promise --> đảm bảo rằng chỉ khi kết nối DB thành công thì server mới bắt đầu chạy
 connnectDB().then(() => {

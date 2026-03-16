@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     avatarUrl: {
-      type: String, // linl CDN để hiển thị hình
+      type: String, // link CDN để hiển thị hình
     },
     avatarId: {
       type: String, // Cloudinary public_id để xóa hình ảnh trên Cloudinary

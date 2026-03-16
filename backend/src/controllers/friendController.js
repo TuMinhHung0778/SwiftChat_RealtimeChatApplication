@@ -2,7 +2,6 @@ import Friend from "../models/Friend.js";
 import User from "../models/User.js";
 import FriendRequest from "../models/FriendRequest.js";
 
-// gửi yêu cầu kết bạn
 export const sendFriendRequest = async (req, res) => {
   try {
     const { to, message } = req.body;
@@ -21,7 +20,6 @@ export const sendFriendRequest = async (req, res) => {
       return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
 
-    // kiểm tra xem giữa 2 user đã có mối quan hệ nào chưa, ví dụ: đã là bạn bè hoặc đã có lời mời đang chờ
     let userA = from.toString();
     let userB = to.toString();
 
@@ -64,7 +62,6 @@ export const sendFriendRequest = async (req, res) => {
   }
 };
 
-// đồng ý kết bạn
 export const acceptFriendRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
@@ -109,7 +106,6 @@ export const acceptFriendRequest = async (req, res) => {
   }
 };
 
-// từ chối kết bạn
 export const declineFriendRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
@@ -138,7 +134,6 @@ export const declineFriendRequest = async (req, res) => {
   }
 };
 
-// lấy danh sách bạn bè
 export const getAllFriends = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -172,7 +167,6 @@ export const getAllFriends = async (req, res) => {
   }
 };
 
-// lấy danh sách yêu cầu kết bạn
 export const getFriendRequests = async (req, res) => {
   try {
     const userId = req.user._id;

@@ -234,7 +234,7 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 **Tu Minh Hung**
 
 - GitHub: [@TuMinhHung0778](https://github.com/TuMinhHung0778)
-- LinkedIn: [Your LinkedIn Profile]
+- LinkedIn: [https://www.linkedin.com/in/t%E1%BB%AB-minh-h%C6%B0ng-85a865260/]
 
 ## 🙏 Acknowledgments
 

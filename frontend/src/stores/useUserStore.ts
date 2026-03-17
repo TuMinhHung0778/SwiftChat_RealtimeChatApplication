@@ -5,7 +5,21 @@ import { useAuthStore } from "./useAuthStore";
 import { toast } from "sonner";
 import { useChatStore } from "./useChatStore";
 
-export const useUserStore = create<UserState>((set, get) => ({
+export const useUserStore = create<UserState>((set) => ({
+  users: [],
+  usersLoading: false,
+  fetchAllUsers: async () => {
+    try {
+      set({ usersLoading: true });
+      const users = await userService.fetchAllUsers();
+      set({ users: users ?? [] });
+    } catch (error) {
+      console.error("Lỗi khi fetchAllUsers", error);
+      set({ users: [] });
+    } finally {
+      set({ usersLoading: false });
+    }
+  },
   updateAvatarUrl: async (formData) => {
     try {
       const { user, setUser } = useAuthStore.getState();

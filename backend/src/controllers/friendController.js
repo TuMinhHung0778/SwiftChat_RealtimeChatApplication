@@ -1,6 +1,8 @@
 import Friend from "../models/Friend.js";
 import User from "../models/User.js";
 import FriendRequest from "../models/FriendRequest.js";
+import mongoose from "mongoose";
+import { io } from "../socket/index.js";
 
 export const sendFriendRequest = async (req, res) => {
   try {
@@ -8,7 +10,15 @@ export const sendFriendRequest = async (req, res) => {
 
     const from = req.user._id;
 
-    if (from === to) {
+    if (!to) {
+      return res.status(400).json({ message: "Thiếu thông tin người nhận (to)" });
+    }
+
+    if (!mongoose.isValidObjectId(to)) {
+      return res.status(400).json({ message: "Id người nhận không hợp lệ" });
+    }
+
+    if (from.toString() === to.toString()) {
       return res
         .status(400)
         .json({ message: "Không thể gửi lời mời kết bạn cho chính mình" });
@@ -53,11 +63,21 @@ export const sendFriendRequest = async (req, res) => {
       message,
     });
 
+    io.to(to.toString()).emit("friend-request:new", {
+      requestId: request._id,
+    });
+
     return res
       .status(201)
       .json({ message: "Gửi lời mời kết bạn thành công", request });
   } catch (error) {
     console.error("Lỗi khi gửi yêu cầu kết bạn", error);
+    // handle duplicate key (unique index from/to) gracefully
+    if (error?.code === 11000) {
+      return res
+        .status(400)
+        .json({ message: "Đã có lời mời kết bạn đang chờ" });
+    }
     return res.status(500).json({ message: "Lỗi hệ thống" });
   }
 };

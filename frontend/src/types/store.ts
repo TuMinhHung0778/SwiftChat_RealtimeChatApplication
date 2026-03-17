@@ -92,5 +92,8 @@ export interface FriendState {
 }
 
 export interface UserState {
+  users: User[];
+  usersLoading: boolean;
   updateAvatarUrl: (formData: FormData) => Promise<void>;
+  fetchAllUsers: () => Promise<void>;
 }

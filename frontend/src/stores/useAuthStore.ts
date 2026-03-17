@@ -4,6 +4,8 @@ import { authService } from "@/services/authService";
 import type { AuthState } from "@/types/store";
 import { persist } from "zustand/middleware";
 import { useChatStore } from "./useChatStore";
+import { useFriendStore } from "./useFriendStore";
+import { useUserStore } from "./useUserStore";
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -57,6 +59,9 @@ export const useAuthStore = create<AuthState>()(
 
           await get().fetchMe();
           useChatStore.getState().fetchConversations();
+          useFriendStore.getState().getAllFriendRequests();
+          useFriendStore.getState().getFriends();
+          useUserStore.getState().fetchAllUsers();
 
           toast.success("Chào mừng bạn quay lại với Moji 🎉");
         } catch (error) {
@@ -112,7 +117,10 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "auth-storage",
-      partialize: (state) => ({ user: state.user }), // chỉ persist user
+      partialize: (state) => ({
+        user: state.user,
+        accessToken: state.accessToken,
+      }),
     },
   ),
 );

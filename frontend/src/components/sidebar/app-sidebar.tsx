@@ -23,6 +23,8 @@ import { useThemeStore } from "@/stores/useThemeStore";
 import { useAuthStore } from "@/stores/useAuthStore";
 import ConversationSkeleton from "../skeleton/ConversationSkeleton";
 import { useChatStore } from "@/stores/useChatStore";
+import AllUsersList from "@/components/users/AllUsersList";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { isDark, toggleTheme } = useThemeStore();
@@ -90,7 +92,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupAction>
 
           <SidebarGroupContent>
-            {convoLoading ? <ConversationSkeleton /> : <DirectMessageList />}
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 rounded-xl p-1 mb-2">
+                <TabsTrigger value="all" className="rounded-lg">
+                  Tất cả
+                </TabsTrigger>
+                <TabsTrigger value="dm" className="rounded-lg">
+                  Đã chat
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="all" className="mt-0">
+                <AllUsersList />
+              </TabsContent>
+
+              <TabsContent value="dm" className="mt-0">
+                {convoLoading ? <ConversationSkeleton /> : <DirectMessageList />}
+              </TabsContent>
+            </Tabs>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

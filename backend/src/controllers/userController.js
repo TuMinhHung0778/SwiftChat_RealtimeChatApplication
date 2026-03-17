@@ -1,6 +1,24 @@
 import { uploadImageFromBuffer } from "../middlewares/uploadMiddleware.js";
 import User from "../models/User.js";
 
+export const getAllUsers = async (req, res) => {
+  try {
+    const userId = req.user?._id;
+
+    const users = await User.find(
+      userId ? { _id: { $ne: userId } } : {},
+      "_id username displayName avatarUrl bio createdAt",
+    )
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({ users });
+  } catch (error) {
+    console.error("Lỗi khi gọi getAllUsers", error);
+    return res.status(500).json({ message: "Lỗi hệ thống" });
+  }
+};
+
 export const authMe = async (req, res) => {
   try {
     const user = req.user; // lấy từ authMiddleware

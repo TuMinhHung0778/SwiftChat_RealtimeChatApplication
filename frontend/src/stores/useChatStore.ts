@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { useAuthStore } from "./useAuthStore";
 import { useSocketStore } from "./useSocketStore";
+import type { Conversation } from "@/types/chat";
 
 export const useChatStore = create<ChatState>()(
   persist(
@@ -152,9 +153,12 @@ export const useChatStore = create<ChatState>()(
         }
       },
       updateConversation: (conversation) => {
+        if (!conversation || typeof conversation !== "object") return;
         set((state) => ({
           conversations: state.conversations.map((c) =>
-            c._id === conversation._id ? { ...c, ...conversation } : c,
+            c._id === (conversation as Conversation)._id
+              ? { ...c, ...(conversation as Partial<Conversation>) }
+              : c,
           ),
         }));
       },

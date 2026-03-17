@@ -1,6 +1,7 @@
 import { Bell, ChevronsUpDown, UserIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,11 +22,13 @@ import Logout from "../auth/Logout";
 import { useState } from "react";
 import FriendRequestDialog from "../friendRequest/FriendRequestDialog";
 import ProfileDialog from "../profile/ProfileDialog";
+import { useFriendStore } from "@/stores/useFriendStore";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
   const [friendRequestOpen, setfriendRequestOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const receivedCount = useFriendStore((s) => s.receivedList?.length ?? 0);
 
   return (
     <>
@@ -82,7 +85,16 @@ export function NavUser({ user }: { user: User }) {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setfriendRequestOpen(true)}>
                   <Bell className="text-muted-foreground dark:group-focus:!text-accent-foreground" />
-                  Thông Báo
+                  <span className="flex-1">Thông Báo</span>
+                  {receivedCount > 0 ? (
+                    <Badge
+                      variant="destructive"
+                      className="min-w-5 px-1.5 py-0 text-[11px] leading-4"
+                      aria-label={`Bạn có ${receivedCount} lời mời kết bạn`}
+                    >
+                      {receivedCount > 99 ? "99+" : receivedCount}
+                    </Badge>
+                  ) : null}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
